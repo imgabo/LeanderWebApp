@@ -67,8 +67,15 @@ namespace LeanderWebApp.Data.Auth
                     MySqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
+                        if((int) reader["Codigo"] == 1)
+                        {
+                            success.Numero = 500;
+                            success.Resultado = reader["JsonResponse"].ToString();
+                            break;
+                        }
                         success.Numero = 200;
                         success.Resultado = reader["JsonResponse"].ToString();
+                        
                     }
                     conexion.Close();
                     return success;
