@@ -3,14 +3,14 @@ using LeanderWebApp.Model;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LeanderWebApp.Controllers.Auth
+namespace LeanderWebApp.Controllers
 {
     [EnableCors("corspolicy")]
     [ApiController]
     [Route("[controller]/[action]")]
     public class ProductosController : Controller
     {
-        private ConsultaProductos consulta =  new ConsultaProductos();
+        private ConsultaProductos consulta = new ConsultaProductos();
 
         #region Insertar Producto
         [HttpPost]
@@ -40,6 +40,14 @@ namespace LeanderWebApp.Controllers.Auth
         }
         #endregion
 
+        #region Listar Productos
+        [HttpGet]
+        public IActionResult GetProducts()
+        {
+            var list = consulta.GetProductos();
+            return Ok(list);
+        }
+        #endregion
 
     }
 }

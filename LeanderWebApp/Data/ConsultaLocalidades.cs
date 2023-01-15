@@ -1,39 +1,27 @@
 ﻿using LeanderWebApp.Model;
 using MySqlConnector;
-using Newtonsoft.Json;
 using System.Data;
-using System.Data.SqlClient;
 
 namespace LeanderWebApp.Data
 {
-    public class ConsultaProductos
+    public class ConsultaLocalidades
     {
         private ParametrosConfiguracion ParametrosConfiguracion = new ParametrosConfiguracion("MySqlConnection");
 
-
-        #region Insert producto
-
-        public object InsertProducto(Producto producto)
+        public object InsertLocalidad(Localidad localidad)
         {
             try
             {
                 Success success = new Success();
-                var procedure = "proc_insert_producto";
+                var procedure = "proc_insert_localidades";
                 using (MySqlConnection conexion = new MySqlConnection(ParametrosConfiguracion.getConexionString()))
                 {
                     conexion.Open();
                     MySqlCommand cmd = new MySqlCommand(procedure, conexion);
 
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@p_nombre", producto.Nombre);
-                    cmd.Parameters.AddWithValue("@p_fecha_ingreso", producto.fecha_ingreso);
-                    cmd.Parameters.AddWithValue("@p_fk_id_categoria", producto.fk_id_categoria);
-                    cmd.Parameters.AddWithValue("@p_fk_id_estado", producto.fk_id_estado);
-                    cmd.Parameters.AddWithValue("@p_fk_id_locacion", producto.fk_id_locacion);
-                    cmd.Parameters.AddWithValue("@p_precio_compra", producto.precio_compra);
-                    cmd.Parameters.AddWithValue("@p_precio_venta", producto.precio_venta);
-                    cmd.Parameters.AddWithValue("@p_observaciones", producto.observaciones);
-                    cmd.Parameters.AddWithValue("@p_imagen", producto.imagen);
+                    cmd.Parameters.AddWithValue("@p_nombre", localidad.Nombre);
+
                     MySqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
@@ -60,40 +48,33 @@ namespace LeanderWebApp.Data
                 return error;
             }
 
-
         }
 
 
-        #endregion
 
-
-        #region Update Producto
-
-        public object UpdateProducto(Producto producto)
+        public object UpdateLocalidad(Localidad localidad)
         {
             try
             {
                 Success success = new Success();
-                var procedure = "proc_update_producto";
+                var procedure = "proc_update_localidades";
                 using (MySqlConnection conexion = new MySqlConnection(ParametrosConfiguracion.getConexionString()))
                 {
                     conexion.Open();
                     MySqlCommand cmd = new MySqlCommand(procedure, conexion);
 
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@p_id", producto.Id);
-                    cmd.Parameters.AddWithValue("@p_nombre", producto.Nombre);
-                    cmd.Parameters.AddWithValue("@p_fecha_ingreso", producto.fecha_ingreso);
-                    cmd.Parameters.AddWithValue("@p_fk_id_categoria", producto.fk_id_categoria);
-                    cmd.Parameters.AddWithValue("@p_fk_id_estado", producto.fk_id_estado);
-                    cmd.Parameters.AddWithValue("@p_fk_id_locacion", producto.fk_id_locacion);
-                    cmd.Parameters.AddWithValue("@p_precio_compra", producto.precio_compra);
-                    cmd.Parameters.AddWithValue("@p_precio_venta", producto.precio_venta);
-                    cmd.Parameters.AddWithValue("@p_observaciones", producto.observaciones);
-                    cmd.Parameters.AddWithValue("@p_imagen", producto.imagen);
+                    cmd.Parameters.AddWithValue("@p_id", localidad.Id);
+                    cmd.Parameters.AddWithValue("@p_nombre", localidad.Nombre);
                     MySqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
+                        if ((int)reader["Codigo"] == 1)
+                        {
+                            success.Numero = 500;
+                            success.Resultado = reader["JsonResponse"].ToString();
+                            break;
+                        }
                         success.Numero = 200;
                         success.Resultado = reader["Mensaje"].ToString();
 
@@ -111,18 +92,15 @@ namespace LeanderWebApp.Data
                 return error;
             }
 
-
         }
-        #endregion
 
-        #region Delete Producto
 
-        public object DeleteProducto(int Id)
+        public object DeleteLocalidad(int Id)
         {
             try
             {
                 Success success = new Success();
-                var procedure = "proc_delete_producto";
+                var procedure = "proc_delete_localidades";
                 using (MySqlConnection conexion = new MySqlConnection(ParametrosConfiguracion.getConexionString()))
                 {
                     conexion.Open();
@@ -150,17 +128,15 @@ namespace LeanderWebApp.Data
                 return error;
             }
 
-
         }
-        #endregion
 
-        #region Listar Productos
-        public object GetProductos()
+
+        public object getLocalidades()
         {
             try
             {
                 Success success = new Success();
-                var procedure = "proc_listar_productos";
+                var procedure = "proc_listar_localidades";
                 using (MySqlConnection conexion = new MySqlConnection(ParametrosConfiguracion.getConexionString()))
                 {
                     conexion.Open();
@@ -187,8 +163,12 @@ namespace LeanderWebApp.Data
                 return error;
             }
 
-
         }
-        #endregion
+
+
+
+
+
+
     }
 }
